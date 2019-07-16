@@ -1,0 +1,121 @@
+How the pages class works:
+BEFORE:
+LoginPage loginPage = new LoginPage()
+AFTER
+pages.login()
+____________________________________________
+1. we have different page object classes.
+LoginPage
+OrderPage
+
+2. Pages utility/factory :
+it generates objects from page object classes and returns them
+Pages:
+private Loginpage loginPage;
+public login(){
+ 		return loginPage;
+ 	}
+
+3. HOW WE USE IT:
+from now on, when we want use any poage object, we do not create objects ourselves. We use the pages class.
+Pages is declared in the test base class in class level as a protected variable
+protected Pages pages;
+pages variable is instantiated in the before method of testbase
+tests which are subclasses of test base can use pages variable to get other page objects
+pages.login()
+pages.home()
+____________________________________________
+
+assertEquals(pages.order().header.getText(), ApplicationConstants.ORDER)
+
+here we call HEADER
+which in Menu class
+OrderPage class extends Menu, so because of it you call header from pages.order?
+
+_____________________________________________
+EXTENT REPORTS: reporting tool that generates HTML reports with detailed steps, metrics and screenshots
+Next lines are updated since the class:
+ExtentReports: --> this is the class for starting reporters and building reports.
+For most applications, you should have one ExtentReports instance for the entire JVM.
+
+ExtentHtmlReporter : --> ExtentHtmlReporter creates a rich standalone HTML file,
+use it to set the path where report will be generated, Used to customize the html
+of the report
+
+ExtentTest: ---> used to generate logs in the report.Defines a test. You can add logs,
+snapshots, assign author and categories to a test
+________________________________________________________________________________________
+A good report must have the following components:
+1. steps --> we use ExtentTest to generate logs with will be our steps
+2. screenshots --> we will take a screenshot with our custom method and attach to our report
+// create a new test / test case in the report and give name : Page headers test
+
+extentLogger = report.createTest("Page headers test");
+
+// use logger to log the steps
+extentLogger.info("Logging to the application");
+// log the pass
+extentLogger.pass("Page headers test");
+XML RUNNER
+In testng we can run multiple classes using xml runner. to create a testng xml runner we create a new xml file with any name and this to the first line:
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+Test Suite --> Test --> Group --> Package --> Class --> Method
+
+------------------------------------------------------------
+BATCH RUN / RUN ALL OF THE TESTS
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+    <suite name="WebOrders" verbose="1">
+        <test name="WebOrders Automated Tests">
+            <packages>
+                <package name=".*"></package>
+            </packages>
+        </test>
+    </suite>
+
+------------------------------------------------------------
+HOW TO RUN SPECIFIC PACKAGE(S)
+<test name="WebOrders Automated Tests">
+    <packages>
+        <package name="com.weborders.tests.functional_tests.order"/>
+        <package name="com.weborders.tests.functional_tests.login"/>
+    </packages>
+</test>
+-------------------------------------------------------------
+HOW TO RUN SPECIFIC CLASS(S)
+    <test name="WebOrders Automated Tests">
+        <classes>
+            <class name="com.weborders.tests.functional_tests.login.ErrorMessageValidationTest"/>
+        </classes>
+    </test>
+-------------------------------------------------------------
+HOW TO RUN SPECIFIC METHODS
+<test name="WebOrders Automated Tests">
+    <classes>
+        <class name="com.weborders.tests.functional_tests.login.ErrorMessageValidationTest">
+            <methods>
+                <include name="blankUsername"/>
+                <include name="blankPassword"/>
+            </methods>
+        </class>
+    </classes>
+</test>
+
+When we use include option, only methods that are listed in include will run,
+all other methods in that class will be ignored
+-----------------------------------------------------------------------------
+<test name="WebOrders Automated Tests">
+    <classes>
+        <class name="com.weborders.tests.functional_tests.login.ErrorMessageValidationTest">
+            <methods>
+                <exclude name="blankPassword"/>
+            </methods>
+        </class>
+    </classes>
+</test>
+
+When we use exclude option,
+methods that are NOT listed in exclude will run,
+exluded method will not run
+------------------------------------------------------------------------------
+

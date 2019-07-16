@@ -1,0 +1,9 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="WebOrders" verbose="1" >
+
+    <test name="WebOrders Automated Tests"   >
+        <packages>
+            <package name="com.weborders.tests.functional_tests.login"></package>
+        </packages>
+    </test>
+</suite>
